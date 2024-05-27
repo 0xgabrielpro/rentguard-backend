@@ -1,0 +1,40 @@
+const Property = require('../models/property');
+
+const searchProperties = (req, res) => {
+  const { location } = req.query;
+  Property.getPropertiesByLocation(location, (err, properties) => {
+    if (err) return res.status(500).send({ message: 'Property search failed', err });
+    res.status(200).send(properties);
+  });
+};
+
+const viewPropertyDetails = (req, res) => {
+  const { id } = req.params;
+  Property.getPropertyById(id, (err, property) => {
+    if (err || !property) return res.status(404).send({ message: 'Property details are unavailable' });
+    res.status(200).send(property);
+  });
+};
+
+const uploadProperty = (req, res) => {
+  const { location, price, phone, email, description, image, owner_id } = req.body;
+  Property.createProperty({ location, price, phone, email, description, image, owner_id }, (err) => {
+    if (err) return res.status(500).send({ message: 'Property upload failed', err });
+    res.status(201).send({ message: 'Property uploaded successfully' });
+  });
+};
+
+const deleteProperty = (req, res) => {
+  const { id } = req.params;
+  Property.deleteProperty(id, (err) => {
+    if (err) return res.status(500).send({ message: 'Property deletion failed', err });
+    res.status(200).send({ message: 'Property deleted successfully' });
+  });
+};
+
+module.exports = {
+  searchProperties,
+  viewPropertyDetails,
+  uploadProperty,
+  deleteProperty
+};
