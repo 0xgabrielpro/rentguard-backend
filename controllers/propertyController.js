@@ -8,6 +8,13 @@ const searchProperties = (req, res) => {
   });
 };
 
+const viewAllProperties = (req, res) => {
+  Property.getAllProperties((err, properties) => {
+    if (err) return res.status(500).send({ message: 'Property search failed', err });
+    res.status(200).send(properties);
+  });
+};
+
 const viewPropertyDetails = (req, res) => {
   const { id } = req.params;
   Property.getPropertyById(id, (err, property) => {
@@ -34,6 +41,7 @@ const deleteProperty = (req, res) => {
 
 module.exports = {
   searchProperties,
+  viewAllProperties,
   viewPropertyDetails,
   uploadProperty,
   deleteProperty

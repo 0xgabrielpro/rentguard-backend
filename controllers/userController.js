@@ -11,6 +11,14 @@ const register = (req, res) => {
   });
 };
 
+const update = (req, res) => {
+  const { id, username, email, phone, gender, password, role } = req.body;
+  User.updateUser({ id, username, email, phone, gender, password, role }, (err) => {
+    if (err) return res.status(500).send({ message: 'User update failed', err });
+    res.status(201).send({ message: 'Account updated successfully' });
+  });
+};
+
 const login = (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).send({ message: 'Invalid email or password' });
@@ -29,9 +37,7 @@ const login = (req, res) => {
 };
 
 const logout = (req, res) => {
-  // Clear the JWT token from the user's session by removing the cookie
   res.clearCookie('token');
-
   res.status(200).send({ message: 'Logout successful' });
 };
 
@@ -52,5 +58,6 @@ module.exports = {
   register,
   login,
   logout,
+  update,
   resetPassword
 };
