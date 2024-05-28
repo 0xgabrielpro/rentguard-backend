@@ -4,17 +4,17 @@ const db = new sqlite3.Database('./db/database.sqlite');
 const bcrypt = require('bcryptjs');
 
 const createUser = (user, callback) => {
-  const { username, email, phone, gender, password, role } = user;
+  const { username, email, phone, password, role } = user;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  db.run(`INSERT INTO users (username, email, phone, gender, password, role) VALUES (?, ?, ?, ?, ?, ?)`,
-    [username, email, phone, gender, hashedPassword, role], callback);
+  db.run(`INSERT INTO users (username, email, phone, password, role) VALUES (?, ?, ?, ?, ?)`,
+    [username, email, phone, hashedPassword, role], callback);
 };
 
 const updateUser = (user, callback) => {
-  const { id, username, email, phone, gender, password, role } = user;
+  const { id, username, email, phone, password, role } = user;
   const hashedPassword = bcrypt.hashSync(password, 10);
-  db.run(`UPDATE users SET username = ?, email = ?, phone = ?, gender = ?, password = ?, role = ? WHERE id = ?`,
-    [username, email, phone, gender, hashedPassword, role, id], callback);
+  db.run(`UPDATE users SET username = ?, email = ?, phone = ?, password = ?, role = ? WHERE id = ?`,
+    [username, email, phone, hashedPassword, role, id], callback);
 };
 
 const makeOwner = (user, callback) => {

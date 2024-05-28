@@ -24,8 +24,8 @@ const viewPropertyDetails = (req, res) => {
 };
 
 const uploadProperty = (req, res) => {
-  const { location, price, phone, email, description, image, owner_id } = req.body;
-  Property.createProperty({ location, price, phone, email, description, image, owner_id }, (err) => {
+  const { location, price, description, image, owner_id } = req.body;
+  Property.createProperty({ location, price, description, image, owner_id }, (err) => {
     if (err) return res.status(500).send({ message: 'Property upload failed', err });
     res.status(201).send({ message: 'Property uploaded successfully' });
   });

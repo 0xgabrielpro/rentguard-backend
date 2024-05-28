@@ -13,7 +13,6 @@ const seedUsers = () => {
       username TEXT UNIQUE,
       email TEXT UNIQUE,
       phone TEXT,
-      gender TEXT,
       password TEXT,
       role TEXT DEFAULT 'tenant'
     )`);
@@ -23,11 +22,10 @@ const seedUsers = () => {
       const username = faker.internet.userName();
       const email = faker.internet.email();
       const phone = faker.phone.phoneNumber();
-      const gender = faker.random.arrayElement(['male', 'female']);
       const password = faker.internet.password();
 
-      db.run(`INSERT INTO users (username, email, phone, gender, password) VALUES (?, ?, ?, ?, ?)`,
-        [username, email, phone, gender, password], (err) => {
+      db.run(`INSERT INTO users (username, email, phone, password) VALUES (?, ?, ?, ?)`,
+        [username, email, phone, password], (err) => {
           if (err) {
             console.error('Error seeding user:', err);
           } else {
@@ -46,8 +44,6 @@ const seedProperties = () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       location TEXT,
       price REAL,
-      phone TEXT,
-      email TEXT,
       description TEXT,
       image TEXT,
       owner_id INTEGER,
@@ -58,14 +54,12 @@ const seedProperties = () => {
     for (let i = 0; i < 10; i++) {
       const location = faker.address.city();
       const price = faker.random.number({ min: 1000, max: 100000 });
-      const phone = faker.phone.phoneNumber();
-      const email = faker.internet.email();
       const description = faker.lorem.sentence();
       const image = faker.image.imageUrl();
       const owner_id = faker.random.number({ min: 1, max: 10 }); // Assuming users are seeded first
 
-      db.run(`INSERT INTO properties (location, price, phone, email, description, image, owner_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`, [location, price, phone, email, description, image, owner_id], (err) => {
+      db.run(`INSERT INTO properties (location, price, description, image, owner_id)
+        VALUES (?, ?, ?, ?, ?)`, [location, price, description, image, owner_id], (err) => {
         if (err) {
           console.error('Error seeding property:', err);
         } else {

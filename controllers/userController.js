@@ -4,16 +4,16 @@ const { secret } = require('../config');
 const User = require('../models/user');
 
 const register = (req, res) => {
-  const { username, email, phone, gender, password } = req.body;
-  User.createUser({ username, email, phone, gender, password, role: 'tenant' }, (err) => {
+  const { username, email, phone, password } = req.body;
+  User.createUser({ username, email, phone, password, role: 'tenant' }, (err) => {
     if (err) return res.status(500).send({ message: 'User registration failed', err });
     res.status(201).send({ message: 'Account creation successfully' });
   });
 };
 
 const update = (req, res) => {
-  const { id, username, email, phone, gender, password, role } = req.body;
-  User.updateUser({ id, username, email, phone, gender, password, role }, (err) => {
+  const { id, username, email, phone, password, role } = req.body;
+  User.updateUser({ id, username, email, phone, password, role }, (err) => {
     if (err) return res.status(500).send({ message: 'User update failed', err });
     res.status(201).send({ message: 'Account updated successfully' });
   });

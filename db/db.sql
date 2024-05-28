@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS users (
   username TEXT UNIQUE,
   email TEXT UNIQUE,
   phone TEXT,
-  gender TEXT,
   password TEXT,
   role TEXT DEFAULT 'tenant'
 );
@@ -14,8 +13,6 @@ CREATE TABLE IF NOT EXISTS properties (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   location TEXT,
   price REAL,
-  phone TEXT,
-  email TEXT,
   description TEXT,
   image TEXT,
   owner_id INTEGER,
