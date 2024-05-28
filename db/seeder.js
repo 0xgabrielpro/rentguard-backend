@@ -21,8 +21,8 @@ const seedUsers = () => {
     for (let i = 0; i < 10; i++) {
       const username = faker.internet.userName();
       const email = faker.internet.email();
-      const phone = faker.phone.phoneNumber();
-      const password = faker.internet.password();
+      const phone = "+255678901234";
+      const password = "password";
 
       db.run(`INSERT INTO users (username, email, phone, password) VALUES (?, ?, ?, ?)`,
         [username, email, phone, password], (err) => {
@@ -55,7 +55,7 @@ const seedProperties = () => {
       const location = faker.address.city();
       const price = faker.random.number({ min: 1000, max: 100000 });
       const description = faker.lorem.sentence();
-      const image = faker.image.imageUrl();
+      const image = "http://localhost:3000/images/nyumba.png";
       const owner_id = faker.random.number({ min: 1, max: 10 }); // Assuming users are seeded first
 
       db.run(`INSERT INTO properties (location, price, description, image, owner_id)

@@ -32,7 +32,7 @@ const login = (req, res) => {
 
     const token = jwt.sign({ id: user.id, role: user.role }, secret, { expiresIn: '1h' });
     res.cookie('token', token, { httpOnly: true });
-    res.status(200).send({ message: 'Login successful' });
+    res.status(200).send({ token });
   });
 };
 
