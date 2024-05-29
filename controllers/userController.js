@@ -21,18 +21,30 @@ const update = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) return res.status(400).send({ message: 'Invalid email or password' });
+
+  if (!email || !password) {
+    return res.status(400).send({ message: 'Invalid email or password' });
+  }
 
   User.getUserByEmail(email, (err, user) => {
-    if (err) return res.status(500).send({ message: 'Failed to validate user', err });
-    if (!user) return res.status(400).send({ message: 'Invalid email or password' });
+    if (err) {
+      console.error('Error fetching user by email:', err);
+      return res.status(500).send({ message: 'Failed to validate user' });
+    }
+
+    if (!user) {
+      return res.status(400).send({ message: 'Invalid email or password' });
+    }
 
     const validPassword = bcrypt.compareSync(password, user.password);
-    if (!validPassword) return res.status(400).send({ message: 'Invalid email or password' });
+    if (!validPassword) {
+      return res.status(400).send({ message: 'Invalid email or password' });
+    }
 
     const token = jwt.sign({ id: user.id, role: user.role }, secret, { expiresIn: '1h' });
+
     res.cookie('token', token, { httpOnly: true });
-    res.status(200).send({ token });
+    res.status(200).send({ token, role: user.role });
   });
 };
 
