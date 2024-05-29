@@ -19,6 +19,14 @@ const update = (req, res) => {
   });
 };
 
+const findUser = (req, res) => {
+  const { id } = req.body;
+  User.getUserById({ id }, (err) => {
+    if (err) return res.status(500).send({ message: 'User check failed', err });
+    res.status(200).send({ message: 'User found successfully' });
+  });
+};
+
 const updateProfile = (req, res) => {
   const { id, username, email, phone } = req.body;
 
@@ -145,5 +153,6 @@ module.exports = {
   update,
   resetPassword,
   forgotPassword,
-  updateProfile
+  updateProfile,
+  findUser
 };
