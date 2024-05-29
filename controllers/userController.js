@@ -43,14 +43,69 @@ const logout = (req, res) => {
 
 const resetPassword = (req, res) => {
   const { email, newPassword } = req.body;
-  const hashedPassword = bcrypt.hashSync(newPassword, 10);
-  User.getUserByEmail(email, (err, user) => {
-    if (err || !user) return res.status(400).send({ message: 'Invalid email' });
 
-    db.run(`UPDATE users SET password = ? WHERE email = ?`, [hashedPassword, email], (updateErr) => {
-      if (updateErr) return res.status(500).send({ message: 'Password reset failed', updateErr });
-      res.status(200).send({ message: 'Password reset successfully' });
-    });
+  if (!email || !newPassword) {
+    return res.status(400).send({ message: 'Email and new password are required' });
+  }
+
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+  User.getUserByEmail(email, (err, user) => {
+    if (err) {
+      console.error('Error fetching user by email:', err);
+      return res.status(500).send({ message: 'Server error' });
+    }
+
+    if (!user) {
+      return res.status(400).send({ message: 'Invalid email' });
+    }
+
+    db.run(
+      `UPDATE users SET password = ? WHERE email = ?`,
+      [hashedPassword, email],
+      (updateErr) => {
+        if (updateErr) {
+          console.error('Error updating password:', updateErr);
+          return res.status(500).send({ message: 'Password reset failed' });
+        }
+
+        res.status(200).send({ message: 'Password reset successfully' });
+      }
+    );
+  });
+};
+
+const forgotPassword = (req, res) => {
+  const { email, newPassword } = req.body;
+
+  if (!email || !newPassword) {
+    return res.status(400).send({ message: 'Email and new password are required' });
+  }
+
+  const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+  User.getUserByEmail(email, (err, user) => {
+    if (err) {
+      console.error('Error fetching user by email:', err);
+      return res.status(500).send({ message: 'Server error' });
+    }
+
+    if (!user) {
+      return res.status(400).send({ message: 'Invalid email' });
+    }
+
+    db.run(
+      `UPDATE users SET password = ? WHERE email = ?`,
+      [hashedPassword, email],
+      (updateErr) => {
+        if (updateErr) {
+          console.error('Error updating password:', updateErr);
+          return res.status(500).send({ message: 'Password reset failed' });
+        }
+
+        res.status(200).send({ message: 'Password reset successfully' });
+      }
+    );
   });
 };
 
@@ -59,5 +114,6 @@ module.exports = {
   login,
   logout,
   update,
-  resetPassword
+  resetPassword,
+  forgotPassword
 };
