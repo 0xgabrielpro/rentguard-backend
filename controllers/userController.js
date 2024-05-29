@@ -19,6 +19,23 @@ const update = (req, res) => {
   });
 };
 
+const updateProfile = (req, res) => {
+  const { id, username, email, phone } = req.body;
+
+  if (!id || !username || !email || !phone) {
+    return res.status(400).send({ message: 'Missing required fields' });
+  }
+
+  User.updateUserProfile({ id, username, email, phone }, (err) => {
+    if (err) {
+      return res.status(500).send({ message: 'User profile update failed', err });
+    }
+    
+    res.status(201).send({ message: 'Profile updated successfully' });
+  });
+};
+
+
 const login = (req, res) => {
   const { email, password } = req.body;
 
@@ -127,5 +144,6 @@ module.exports = {
   logout,
   update,
   resetPassword,
-  forgotPassword
+  forgotPassword,
+  updateProfile
 };

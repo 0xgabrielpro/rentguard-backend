@@ -17,6 +17,25 @@ const updateUser = (user, callback) => {
     [username, email, phone, hashedPassword, role, id], callback);
 };
 
+const updateUserProfile = (userData, callback) => {
+  const { id, username, email, phone } = userData;
+  
+  if (userData.password) {
+    const hashedPassword = bcrypt.hashSync(userData.password, 10);
+    db.run(
+      `UPDATE users SET username = ?, email = ?, phone = ?, password = ? WHERE id = ?`,
+      [username, email, phone, hashedPassword, id],
+      callback
+    );
+  } else {
+    db.run(
+      `UPDATE users SET username = ?, email = ?, phone = ? WHERE id = ?`,
+      [username, email, phone, id],
+      callback
+    );
+  }
+};
+
 const makeOwner = (user, callback) => {
   const { id, role } = user;
   db.run(`UPDATE users SET role = ? WHERE id = ?`,
@@ -39,7 +58,6 @@ const getAllUsers = (callback) => {
   db.all(`SELECT * FROM users`, [], callback);
 };
 
-// Other necessary user model functions...
 
 module.exports = {
   createUser,
@@ -48,5 +66,6 @@ module.exports = {
   getAllUsers,
   deleteUserById,
   updateUser,
+  updateUserProfile,
   makeOwner
 };

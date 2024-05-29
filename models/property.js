@@ -29,8 +29,6 @@ const deleteProperty = (id, callback) => {
   db.run(`DELETE FROM properties WHERE id = ?`, [id], callback);
 };
 
-// Other necessary property model functions...
-
 module.exports = {
   createProperty,
   getPropertyById,
