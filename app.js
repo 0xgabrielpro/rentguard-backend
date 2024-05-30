@@ -8,8 +8,6 @@ const userRoutes = require('./routes/userRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const cors = require('cors');
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/database.sqlite');
 
 const corsOptions = {
   origin: '*',
@@ -49,22 +47,6 @@ app.get('/api/images', (req, res) => {
     });
 
     res.json(imageFiles);
-  });
-});
-
-app.post('/api/agent_request', (req, res) => {
-  const { user_id, agency_name, experience, contact_number } = req.body;
-
-  if (!user_id || !agency_name || !experience || !contact_number) {
-    return res.status(400).send({ message: 'All fields are required' });
-  }
-
-  const query = `INSERT INTO agrequests (user_id, agency_name, contact_number, experience) VALUES (?, ?, ?, ?)`;
-  db.run(query, [user_id, agency_name, contact_number, experience], function(err) {
-    if (err) {
-      return res.status(500).send({ message: 'Failed to submit request', err });
-    }
-    res.status(200).send({ message: 'Request submitted successfully' });
   });
 });
 

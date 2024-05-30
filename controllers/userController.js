@@ -21,6 +21,14 @@ const update = (req, res) => {
   });
 };
 
+const agentRequest = (req, res) => {
+  const { user_id, agency_name, experience, contact_number } = req.body;
+  User.agentRequest({ user_id, agency_name, experience, contact_number }, (err) => {
+    if (err) return res.status(500).send({ message: 'request submition failed', err });
+    res.status(201).send({ message: 'Request submited successfully' });
+  });
+};
+
 const findUser = (req, res) => {
   const { id } = req.query; 
 
@@ -177,5 +185,6 @@ module.exports = {
   resetPassword,
   forgotPassword,
   updateProfile,
+  agentRequest,
   findUser
 };

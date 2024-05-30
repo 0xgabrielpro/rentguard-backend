@@ -10,8 +10,24 @@ const createUser = (user, callback) => {
     [username, email, phone, hashedPassword, role], callback);
 };
 
-const updateUser = (user, callback) => {
-  const { id, username, email, phone, password, role } = user;
+const agentRequest = (agent, callback) => {
+  const { user_id, agency_name, experience, contact_number } = agent;
+
+  if (!user_id || !agency_name || !experience || !contact_number) {
+    return res.status(400).send({ message: 'All fields are required' });
+  }
+
+  const query = `INSERT INTO agrequests (user_id, agency_name, contact_number, experience) VALUES (?, ?, ?, ?)`;
+  db.run(query, [user_id, agency_name, contact_number, experience], function(err) {
+    if (err) {
+      return res.status(500).send({ message: 'Failed to submit request', err });
+    }
+    res.status(200).send({ message: 'Request submitted successfully' });
+  });
+};
+
+const updateUser = (req, callback) => {
+  const { id, username, email, phone, password, role } = req;
   const hashedPassword = bcrypt.hashSync(password, 10);
   db.run(`UPDATE users SET username = ?, email = ?, phone = ?, password = ?, role = ? WHERE id = ?`,
     [username, email, phone, hashedPassword, role, id], callback);
@@ -73,5 +89,6 @@ module.exports = {
   deleteUserById,
   updateUser,
   updateUserProfile,
+  agentRequest,
   makeOwner
 };
