@@ -59,8 +59,8 @@ app.post('/api/agent_request', (req, res) => {
     return res.status(400).send({ message: 'All fields are required' });
   }
 
-  const query = `INSERT INTO agrequests (user_id, agency_name, experience, contact_number) VALUES (?, ?, ?, ?)`;
-  db.run(query, [user_id, agency_name, experience, contact_number], function(err) {
+  const query = `INSERT INTO agrequests (user_id, agency_name, contact_number, experience) VALUES (?, ?, ?, ?)`;
+  db.run(query, [user_id, agency_name, contact_number, experience], function(err) {
     if (err) {
       return res.status(500).send({ message: 'Failed to submit request', err });
     }
