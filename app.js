@@ -49,6 +49,22 @@ app.get('/api/images', (req, res) => {
   });
 });
 
+router.post('/api/agent_request', (req, res) => {
+  const { user_id, agency_name, experience, contact_number } = req.body;
+
+  if (!user_id || !agency_name || !experience || !contact_number) {
+    return res.status(400).send({ message: 'All fields are required' });
+  }
+
+  const query = `INSERT INTO agrequests (user_id, agency_name, experience, contact_number) VALUES (?, ?, ?, ?)`;
+  db.run(query, [user_id, agency_name, experience, contact_number], function(err) {
+    if (err) {
+      return res.status(500).send({ message: 'Failed to submit request', err });
+    }
+    res.status(200).send({ message: 'Request submitted successfully' });
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

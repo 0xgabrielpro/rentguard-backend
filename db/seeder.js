@@ -72,6 +72,15 @@ const seedRequests = () => {
       user_id INTEGER,
       FOREIGN KEY (user_id) REFERENCES users(id)
     )`);
+    
+    db.run(`CREATE TABLE IF NOT EXISTS agrequests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      agent_name TEXT,
+      experience TEXT,
+      contact_number TEXT,
+      user_id INTEGER,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    )`);
 
     for (let i = 0; i < 10; i++) {
       const request = faker.lorem.sentence();
