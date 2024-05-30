@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 const User = require('../models/user');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./db/database.sqlite');
 
 const register = (req, res) => {
   const { username, email, phone, password } = req.body;

@@ -8,6 +8,9 @@ const userRoutes = require('./routes/userRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const cors = require('cors');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./db/database.sqlite');
+
 const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
