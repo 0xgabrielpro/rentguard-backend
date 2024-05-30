@@ -20,19 +20,23 @@ const update = (req, res) => {
 };
 
 const findUser = (req, res) => {
-  const { id } = req.body;
+  const { id } = req.query; 
 
-  User.getUserById({ id }, (err, user) => {
+  if (!id) {
+    return res.status(400).send({ message: 'User ID is required' });
+  }
+
+  getUserById(id, (err, user) => {
     if (err) {
       return res.status(500).send({ message: 'User check failed', err });
     }
 
     if (!user) {
-      return res.status(404).send({ user });
+      return res.status(404).send({ message: 'User not found' });
     }
 
     // Exclude the password field
-    const { password, ...userWithoutPassword } = user._doc;
+    const { password, ...userWithoutPassword } = user;
 
     res.status(200).send({
       message: 'User found successfully',
@@ -40,6 +44,8 @@ const findUser = (req, res) => {
     });
   });
 };
+
+
 
 
 const updateProfile = (req, res) => {

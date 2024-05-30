@@ -47,8 +47,14 @@ const getUserByEmail = (email, callback) => {
 };
 
 const getUserById = (id, callback) => {
-  db.get(`SELECT * FROM users WHERE id = ?`, [id], callback);
+  db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, row) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, row);
+  });
 };
+
 
 const deleteUserById = (id, callback) => {
   db.run(`DELETE FROM users WHERE id = ?`, [id], callback);
