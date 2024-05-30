@@ -49,7 +49,7 @@ app.get('/api/images', (req, res) => {
   });
 });
 
-router.post('/api/agent_request', (req, res) => {
+app.post('/api/agent_request', (req, res) => {
   const { user_id, agency_name, experience, contact_number } = req.body;
 
   if (!user_id || !agency_name || !experience || !contact_number) {
