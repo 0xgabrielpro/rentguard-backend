@@ -97,7 +97,7 @@ const login = (req, res) => {
       return res.status(400).send({ message: 'Invalid email or password' });
     }
 
-    const token = jwt.sign({ id: user.id, role: user.role }, secret, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: user.role }, secret, { expiresIn: '6h' });
 
     res.cookie('token', token, { httpOnly: true });
     res.status(200).send({ token, role: user.role, id: user.id, email: email });
