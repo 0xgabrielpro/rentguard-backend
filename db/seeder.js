@@ -93,8 +93,8 @@ const seedProperties = () => {
       const location = faker.address.city();
       const price = faker.random.number({ min: 1000, max: 100000 });
       const description = faker.lorem.sentence();
-      // const image = "http://abasi.duckdns.org:3000/images/nyumba.png";
-      const image = "http://192.168.43.230:3000/images/nyumba.png";
+      const image = "http://abasi.duckdns.org:3000/images/nyumba.png";
+      // const image = "http://192.168.43.230:3000/images/nyumba.png";
       const owner_id = faker.random.number({ min: 1, max: 10 });
 
       db.run(`INSERT INTO properties (location, price, description, image, owner_id)
