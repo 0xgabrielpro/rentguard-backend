@@ -11,11 +11,19 @@ const createUser = (user, callback) => {
 };
 
 const agentRequest = (agent, callback) => {
-  const { user_id, agency_name, experience, contact_number } = agent;
-
-  const query = `INSERT INTO agrequests (user_id, agency_name, contact_number, experience) VALUES (?, ?, ?, ?)`;
-  db.run(query, [user_id, agency_name, contact_number, experience], callback);
+  const { user_id, email, agent_name, experience, contact_number } = agent;
+  const query = `INSERT INTO agrequests (user_id, email, agent_name, contact_number, experience) VALUES (?, ?, ?, ?, ?)`;
+  db.run(query, [user_id, email, agent_name, contact_number, experience], (err) => {
+    if (err) {
+      console.error('Error inserting agent request:', err);
+      callback(err);
+    } else {
+      console.log('Agent request inserted successfully');
+      callback(null);
+    }
+  });
 };
+
 
 const updateUser = (req, callback) => {
   const { id, username, email, phone, password, role } = req;

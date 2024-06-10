@@ -25,7 +25,8 @@ const viewRequest = (req, res) => {
 };
 
 const makeOwner = (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  // console.log(id);
   User.makeOwner({ id, role: 'owner' }, (err) => {
     if (err) return res.status(500).send({ message: 'User update failed', err });
     res.status(201).send({ message: 'Account updated successfully' });
@@ -42,6 +43,7 @@ const deleteRequest = (req, res) => {
 
 const deleteUser = (req, res) => {
   const { id } = req.params;
+  console.log(req.params);
   User.deleteUserById(id, (err) => {
     if (err) return res.status(500).send({ message: 'User deletion failed', err });
     res.status(200).send({ message: 'User deleted successfully' });

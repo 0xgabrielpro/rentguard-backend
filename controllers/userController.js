@@ -6,15 +6,23 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./db/database.sqlite');
 
 const register = (req, res) => {
-  const { username, email, phone, password } = req.body;
-  User.createUser({ username, email, phone, password, role: 'tenant' }, (err) => {
-    if (err) return res.status(500).send({ message: 'User registration failed', err });
-    res.status(201).send({ message: 'Account creation successfully' });
-  });
+  const { username, email, phone, password, role } = req.body;
+  if(role){
+    User.createUser({ username, email, phone, password, role }, (err) => {
+      if (err) return res.status(500).send({ message: 'User registration failed', err });
+      res.status(201).send({ message: 'Account creation successfully' });
+    });
+  } else {
+    User.createUser({ username, email, phone, password, role: 'tenant' }, (err) => {
+      if (err) return res.status(500).send({ message: 'User registration failed', err });
+      res.status(201).send({ message: 'Account creation successfully' });
+    });
+  }
 };
 
 const update = (req, res) => {
   const { id, username, email, phone, password, role } = req.body;
+  console.log(req.body);
   User.updateUser({ id, username, email, phone, password, role }, (err) => {
     if (err) return res.status(500).send({ message: 'User update failed', err });
     res.status(201).send({ message: 'Account updated successfully' });
@@ -22,21 +30,21 @@ const update = (req, res) => {
 };
 
 const agentRequest = (req, res) => {
-  const { user_id, agency_name, experience, contact_number } = req.body;
-  User.agentRequest({ user_id, agency_name, experience, contact_number }, (err) => {
+  const { user_id, email, agent_name, experience, contact_number } = req.body;
+  User.agentRequest({ user_id, email, agent_name, experience, contact_number }, (err) => {
     if (err) return res.status(500).send({ message: 'request submition failed', err });
     res.status(201).send({ message: 'Request submited successfully' });
   });
 };
 
 const findUser = (req, res) => {
-  const { id } = req.query; 
+  const { id } = req.params; 
 
   if (!id) {
     return res.status(400).send({ message: 'User ID is required' });
   }
 
-  getUserById(id, (err, user) => {
+  User.getUserById(id, (err, user) => {
     if (err) {
       return res.status(500).send({ message: 'User check failed', err });
     }
@@ -45,7 +53,6 @@ const findUser = (req, res) => {
       return res.status(404).send({ message: 'User not found' });
     }
 
-    // Exclude the password field
     const { password, ...userWithoutPassword } = user;
 
     res.status(200).send({
@@ -56,10 +63,9 @@ const findUser = (req, res) => {
 };
 
 
-
-
 const updateProfile = (req, res) => {
-  const { id, username, email, phone } = req.body;
+  const { id } = req.params;
+  const { username, email, phone } = req.body;
 
   if (!id || !username || !email || !phone) {
     return res.status(400).send({ message: 'Missing required fields' });
@@ -73,6 +79,7 @@ const updateProfile = (req, res) => {
     res.status(201).send({ message: 'Profile updated successfully' });
   });
 };
+
 
 
 const login = (req, res) => {
@@ -110,13 +117,13 @@ const logout = (req, res) => {
 };
 
 const resetPassword = (req, res) => {
-  const { email, newPassword } = req.body;
-
-  if (!email || !newPassword) {
+  const { email, new_password } = req.body;
+  console.log(email);
+  if (!email || !new_password) {
     return res.status(400).send({ message: 'Email and new password are required' });
   }
 
-  const hashedPassword = bcrypt.hashSync(newPassword, 10);
+  const hashedPassword = bcrypt.hashSync(new_password, 10);
 
   User.getUserByEmail(email, (err, user) => {
     if (err) {
@@ -177,6 +184,9 @@ const forgotPassword = (req, res) => {
   });
 };
 
+
+
+
 module.exports = {
   register,
   login,
@@ -186,5 +196,5 @@ module.exports = {
   forgotPassword,
   updateProfile,
   agentRequest,
-  findUser
+  findUser,
 };

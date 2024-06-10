@@ -25,14 +25,32 @@ const getAllProperties = (callback) => {
 };
 
 
+const getAllPropertiesByOwnerId = (ownerId, callback) => {
+  const query = `
+    SELECT properties.*, users.phone as owner_phone 
+    FROM properties 
+    JOIN users ON properties.owner_id = users.id
+    WHERE properties.owner_id = ?
+  `;
+  db.all(query, [ownerId], callback);
+};
+
 const deleteProperty = (id, callback) => {
   db.run(`DELETE FROM properties WHERE id = ?`, [id], callback);
 };
 
+const updateProperty = (req, callback) => {
+  const { id, location, price, description, image, owner_id } = req;
+  db.run(`UPDATE properties SET location = ?, price = ?, description = ?, image = ?, owner_id = ? WHERE id = ?`,
+    [location, price, description, image, owner_id, id], callback);
+};
+
 module.exports = {
+  getAllPropertiesByOwnerId,
   createProperty,
   getPropertyById,
   getPropertiesByLocation,
   getAllProperties,
+  updateProperty,
   deleteProperty
 };

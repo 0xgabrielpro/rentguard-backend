@@ -9,7 +9,7 @@ router.get('/logout', userController.logout);
 router.get('/:id', userController.findUser);
 router.post('/reset-password', userController.resetPassword);
 router.post('/forgot-password', userController.forgotPassword);
-router.post('/update-profile', userController.forgotPassword);
+router.put('/update-profile/:id', userController.updateProfile);
 
 
 

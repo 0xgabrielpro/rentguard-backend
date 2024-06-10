@@ -15,6 +15,15 @@ const viewAllProperties = (req, res) => {
   });
 };
 
+const viewAllPropertiesByOwnerId = (req, res) => {
+  const { id } = req.params;
+  Property.getAllPropertiesByOwnerId(id, (err, properties) => {
+    if (err) return res.status(500).send({ message: 'Property search failed', err });
+    res.status(200).send(properties);
+  });
+};
+
+
 const viewPropertyDetails = (req, res) => {
   const { id } = req.params;
   Property.getPropertyById(id, (err, property) => {
@@ -39,10 +48,27 @@ const deleteProperty = (req, res) => {
   });
 };
 
+const updateProperty = (req, res) => {
+  const { id } = req.params;
+  const { location, price, description, image, owner_id } = req.body;
+  if (!id) {
+    return res.status(400).send({ message: 'Property ID is required' });
+  }
+  
+  Property.updateProperty({ id, location, price, description, image, owner_id }, (err) => {
+    if (err) {
+      return res.status(500).send({ message: 'Property update failed', err });
+    }
+    res.status(200).send({ message: 'Property updated successfully' });
+  });
+};
+
 module.exports = {
+  viewAllPropertiesByOwnerId,
   searchProperties,
   viewAllProperties,
   viewPropertyDetails,
   uploadProperty,
-  deleteProperty
+  deleteProperty,
+  updateProperty
 };

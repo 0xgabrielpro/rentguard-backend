@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS requests (
 CREATE TABLE IF NOT EXISTS agrequests (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   agent_name TEXT,
+  email TEXT,
   experience TEXT,
   contact_number TEXT,
   user_id INTEGER,
