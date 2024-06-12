@@ -3,8 +3,8 @@ const db = new sqlite3.Database('./db/database.sqlite');
 
 const createProperty = (property, callback) => {
   const { location, price, description, image, ownerId } = property;
-  // const fullImageUrl = `http://abasi.duckdns.org:3000/images/${image}`;
-  const fullImageUrl = `http://192.168.43.230:3000/images/${image}`;
+  const fullImageUrl = `http://abasi.duckdns.org:3000/images/${image}`;
+  // const fullImageUrl = `http://192.168.43.230:3000/images/${image}`;
   db.run(`INSERT INTO properties (location, price, description, image, owner_id) VALUES (?, ?, ?, ?, ?)`,
     [location, price, description, fullImageUrl, ownerId], callback);
 };
@@ -50,8 +50,8 @@ const updateProperty = (req, callback) => {
   let params = [location, price, description, ownerId, id];
 
   if (image) {
-    // const fullImageUrl = `http://abasi.duckdns.org:3000/images/${image}`;
-    const fullImageUrl = `http://192.168.43.230:3000/images/${image}`;
+    const fullImageUrl = `http://abasi.duckdns.org:3000/images/${image}`;
+    // const fullImageUrl = `http://192.168.43.230:3000/images/${image}`;
     query = `UPDATE properties SET location = ?, price = ?, description = ?, image = ?, owner_id = ? WHERE id = ?`;
     params = [location, price, description, fullImageUrl, ownerId, id];
   }
